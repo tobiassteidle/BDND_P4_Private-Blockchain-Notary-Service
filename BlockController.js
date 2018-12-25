@@ -2,6 +2,7 @@ const MempoolClass = require('./Mempool.js')
 const BlockChainClass = require('./BlockChain.js');
 const BlockClass = require('./Block.js');
 const Boom = require('boom');
+const hex2ascii = require('hex2ascii');
 /**
  * Controller Definition to make routes work with blocks
  */
@@ -50,6 +51,8 @@ class BlockController {
                 try {
                     // receive block from blockchain
                     let block = await this.blockchain.getBlock(height);
+                    let story = block.body.star.story;
+                    block.body.star.storyDecoded = hex2ascii(story);
                     return block;
                 } catch (e) {
                     throw Boom.badRequest("Block height out of bounds.");
