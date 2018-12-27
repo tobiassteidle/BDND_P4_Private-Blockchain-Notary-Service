@@ -147,7 +147,7 @@ class BlockController {
 
                 try {
                     // get data from payload JSON
-                    let payloadObject = JSON.parse(payload);
+                    let payloadObject = payload;
 
                     let walletAddress = payloadObject.address;
 
@@ -222,7 +222,7 @@ class BlockController {
 
                 try {
                     // get walletAddress from payload JSON
-                    let walletAddress = JSON.parse(payload).address;
+                    let walletAddress = payload.address;
 
                     // if walletAddress undefined or null throw exception
                     if(walletAddress === undefined || walletAddress === null) {
@@ -259,8 +259,8 @@ class BlockController {
 
                 try {
                     // get walletAddress from payload JSON
-                    let walletAddress = JSON.parse(payload).address;
-                    let signature = JSON.parse(payload).signature;
+                    let walletAddress = payload.address;
+                    let signature = payload.signature;
 
                     // if walletAddress undefined or null throw exception
                     if(walletAddress === undefined || walletAddress === null) {
