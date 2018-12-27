@@ -16,7 +16,7 @@ star in the night sky.
 To setup the project for review do the following:
 1. Download the project.
 2. Run command __npm install__ to install the project dependencies.
-3. Run command __node app.js__ in the root directory.
+3. Run command __node app.js__ or __npm start__ in the root directory.
 
 The service was started correctly if you see the following output on the console:
 ```
