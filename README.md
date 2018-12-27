@@ -24,6 +24,9 @@ Server running at: http://localhost:8000
 ```
 
 ## Endpoint documentation
+
+#### GET - /requestValidation
+
 Use the URL for the endpoint:  `http://localhost:8000/requestValidation`  
 The request should contain:
 
@@ -48,6 +51,9 @@ The request must configure a limited validation window of five minutes.
 When re-submitting within validation window, the validation window reduce until it expires.
 
 ---
+
+#### POST - /message-signature/validate
+
 Use the URL for the endpoint:  
 `http://localhost:8000/message-signature/validate`  
 The request should contain:
@@ -77,6 +83,8 @@ The endpoint response look like:
 Upon validation, the user is granted access to register a single star.
 
 ---
+
+#### POST - /block
 
 Use the Url for the endpoint:  
 `http://localhost:8000/block`  
@@ -117,6 +125,8 @@ The response will look like:
 
 ---
 
+#### GET - /stars/hash:[HASH]
+
 Use the URL:  
 `http://localhost:8000/stars/hash:[HASH]`
 
@@ -141,6 +151,8 @@ The response includes entire star block contents along with the addition of star
 ```
 
 ---
+
+#### GET - /stars/address:[ADDRESS]
 
 Use the URL:  
 `http://localhost:8000/stars/address:[ADDRESS]`
@@ -185,6 +197,8 @@ Response:
 ```
 
 ---
+
+#### GET - /block/[HEIGHT]
 
 Use the URL:  
 `http://localhost:8000/block/[HEIGHT]`
