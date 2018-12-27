@@ -3,7 +3,6 @@ const ValidationResponseObjectClass = require('./ValidationResponseObject.js');
 const Boom = require('boom');
 const bitcoinMessage = require('bitcoinjs-message');
 const TimeoutRequestsWindowTime = 5*60*1000;
-//const TimeoutRequestsWindowTime = 5*1000;
 
 class Mempool {
 

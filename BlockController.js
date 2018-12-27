@@ -17,10 +17,7 @@ class BlockController {
         this.mempool = new MempoolClass.Mempool();
         this.blockchain = new BlockChainClass.Blockchain();
         this.getBlockByIndex();
-
-        //this.getBlockByHash();
-        //this.getBlockByWalletAddress();
-
+        this.getBlockByQuery();
         this.postNewBlock();
         this.postRequestValidation();
         this.postMessageSignatureValidate();
@@ -51,14 +48,86 @@ class BlockController {
                 try {
                     // receive block from blockchain
                     let block = await this.blockchain.getBlock(height);
-                    let story = block.body.star.story;
-                    block.body.star.storyDecoded = hex2ascii(story);
-                    return block;
+                    return this.appendStoryDeccoded(block);
                 } catch (e) {
                     throw Boom.badRequest("Block height out of bounds.");
                 }
             }
         });
+    }
+
+    /**
+     * Implement a GET Endpoint to retrieve a block by index, url: "stars/hash:[HASH]", "address:[ADDRESS]"
+     */
+    getBlockByQuery() {
+        this.server.route({
+            method: 'GET',
+            path: '/stars/{query}',
+            handler: async (request, h) => {
+                try {
+                    let query = request.params.query.split(":");
+                    let method = query[0].toLowerCase();
+                    let parameter = query[1];
+
+                    // set filter method for "hash" oder "address" request
+                    let filter = null;
+                    switch(method) {
+                        case "hash":
+                            filter = function (data) {
+                                let block = JSON.parse(data.value);
+                                return block.hash === parameter;
+                            };
+                            break;
+                        case "address":
+                            filter = function (data) {
+                                let body = JSON.parse(data.value).body;
+                                try {
+                                    return body.address === parameter;
+                                } catch (e) {
+                                    return false;
+                                }
+                            };
+                            break;
+                        default:
+                            throw Boom.badRequest("Unknown lookup method.");
+                    }
+
+                    // get filtered blocks from blockchain
+                    let result = await this.blockchain.getBlockData(filter);
+
+                    if(result.length === 1) {
+                        // return single block
+                        return this.appendStoryDeccoded(JSON.parse(result[0].value));
+                    } else {
+
+                        // return block array
+                        let resultArray = [];
+                        let self = this;
+                        result.forEach(function(element) {
+                            resultArray.push(self.appendStoryDeccoded(JSON.parse(element.value)));
+                        });
+                        return resultArray;
+                    }
+
+                } catch (e) {
+                    if(e instanceof Boom) {
+                        throw e;
+                    }
+                    throw Boom.badRequest("Unexpected lookup method or error.");
+                }
+            }
+        });
+    }
+
+    /**
+     * add decoded story to block object
+     * @param block
+     * @returns {*}
+     */
+    appendStoryDeccoded(block) {
+        let story = block.body.star.story;
+        block.body.star.storyDecoded = hex2ascii(story);
+        return block;
     }
 
     /**

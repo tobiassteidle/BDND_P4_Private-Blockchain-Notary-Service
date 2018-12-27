@@ -36,6 +36,10 @@ class Blockchain {
         return this.bd.getBlocksCount();
     }
 
+    async getBlockData(filter) {
+        return this.bd.getBlockData(filter);
+    }
+
     // Add new block
     async addBlock(block) {
         // Add your code here
