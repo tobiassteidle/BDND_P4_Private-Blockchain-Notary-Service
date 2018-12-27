@@ -125,8 +125,12 @@ class BlockController {
      * @returns {*}
      */
     appendStoryDeccoded(block) {
-        let story = block.body.star.story;
-        block.body.star.storyDecoded = hex2ascii(story);
+        try {
+            let story = block.body.star.story;
+            block.body.star.storyDecoded = hex2ascii(story);
+        } catch (e) {
+            // DO NOTHING, "story" not available, maybe genesis block
+        }
         return block;
     }
 
