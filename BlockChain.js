@@ -144,7 +144,7 @@ class Blockchain {
     _modifyBlock(height, block) {
         let self = this;
         return new Promise( (resolve, reject) => {
-            self.bd.addLevelDBData(height, JSON.stringify(block).toString()).then((blockModified) => {
+            self.bd.addLevelDBData(height, JSON.stringify(block)).then((blockModified) => {
                 resolve(blockModified);
             }).catch((err) => { console.log(err); reject(err)});
         });
