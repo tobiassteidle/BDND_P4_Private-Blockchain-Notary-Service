@@ -19,7 +19,7 @@ class Blockchain {
     // will not create the genesis block
     generateGenesisBlock(){
         // Add your code here
-        let self = this;
+        const self = this;
         self.bd.getBlocksCount().then((height) => {
            if(height === 0) {
                this.addBlock(new Block.Block("First block in the chain - Genesis block")).then((block) => {
@@ -43,7 +43,7 @@ class Blockchain {
     // Add new block
     async addBlock(block) {
         // Add your code here
-        let height = await this.getBlockHeight();
+        const height = await this.getBlockHeight();
 
         // Block height
         block.height = height;
@@ -61,7 +61,7 @@ class Blockchain {
         // Block hash with SHA256 using newBlock and converting to a string
         block.hash = SHA256(JSON.stringify(block)).toString();
 
-        let self = this;
+        const self = this;
         return new Promise(function(resolve, reject) {
             // Adding block object to chain
             self.bd.addLevelDBData(block.height, JSON.stringify(block)).then(()  => {
@@ -75,7 +75,7 @@ class Blockchain {
     // Get Block By Height
     async getBlock(height) {
         // Add your code here
-        let self = this;
+        const self = this;
         return new Promise(function (resolve, reject) {
             self.bd.getLevelDBData(height).then((block) => {
                 resolve(JSON.parse(block));
@@ -88,25 +88,21 @@ class Blockchain {
     // Validate if Block is being tampered by Block Height
     validateBlock(height) {
         // Add your code here
-        let self = this;
+        const self = this;
         return new Promise(function (resolve, reject) {
             // get block object
             self.getBlock(height).then((block) => {
                 // get block hash
-                let blockHash = block.hash;
+                const blockHash = block.hash;
 
                 // remove block hash to test block integrity
                 block.hash = '';
 
                 // generate block hash
-                let validBlockHash = SHA256(JSON.stringify(block)).toString();
+                const validBlockHash = SHA256(JSON.stringify(block)).toString();
 
                 // Compare
-                if (blockHash===validBlockHash) {
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
+                resolve(blockHash === validBlockHash);
             });
         });
     }
@@ -114,19 +110,19 @@ class Blockchain {
     // Validate Blockchain
     async validateChain() {
         // Add your code here
-        let self = this;
+        const self = this;
         let errorLog = [];
 
-        let height = await self.getBlockHeight();
-        for(var idx = 0; idx < height - 1; idx++) {
-            let block = await self.getBlock(idx);
-            let previousBlock = await self.getBlock(idx+1);
+        const height = await self.getBlockHeight();
+        for(let idx = 0; idx < height - 1; idx++) {
+            const block = await self.getBlock(idx);
+            const previousBlock = await self.getBlock(idx+1);
 
             if(await self.validateBlock(idx)) {
-                let blockHash = block.hash;
-                let previousBlockHash = previousBlock.previousBlockHash;
+                const blockHash = block.hash;
+                const previousBlockHash = previousBlock.previousBlockHash;
 
-                if (blockHash!==previousBlockHash) {
+                if (blockHash !== previousBlockHash) {
                     errorLog.push(idx);
                 }
             } else {
@@ -142,7 +138,7 @@ class Blockchain {
     // Utility Method to Tamper a Block for Test Validation
     // This method is for testing purpose
     _modifyBlock(height, block) {
-        let self = this;
+        const self = this;
         return new Promise( (resolve, reject) => {
             self.bd.addLevelDBData(height, JSON.stringify(block)).then((blockModified) => {
                 resolve(blockModified);
